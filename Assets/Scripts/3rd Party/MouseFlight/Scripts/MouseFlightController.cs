@@ -3,6 +3,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
+using System.Globalization;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace MFlight
@@ -11,7 +13,7 @@ namespace MFlight
     /// Combination of camera rig and controller for aircraft. Requires a properly set
     /// up rig. I highly recommend either using or referencing the included prefab.
     /// </summary>
-    public class MouseFlightController : MonoBehaviour
+    public class MouseFlightController : NetworkBehaviour
     {
         [Header("Components")]
         [SerializeField] [Tooltip("Transform of the aircraft the rig follows and references")]
@@ -21,7 +23,7 @@ namespace MFlight
         [SerializeField] [Tooltip("Transform of the object on the rig which the camera is attached to")]
         private Transform cameraRig = null;
         [SerializeField] [Tooltip("Transform of the camera itself")]
-        private Transform cam = null;
+        private Camera cam = null;
 
         [Header("Options")]
         public Vector3 offset;
@@ -102,6 +104,17 @@ namespace MFlight
             }
         }
 
+        public override void OnNetworkSpawn()
+        {
+            Debug.Log("Ca marche");
+            if (!IsOwner)
+            {
+                enabled = false;
+                cam.enabled = false;
+                return;
+            }
+        }
+
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Escape)) {
@@ -121,17 +134,20 @@ namespace MFlight
         }
 
         void LateUpdate() {
-            cam.position = cameraRig.position;
-            cam.rotation = cameraRig.rotation;
-            cam.position += cam.forward * offset.z;
-            cam.position += cam.up * offset.y;
-            cam.position += cam.right * offset.x;
+            Transform camTransform = cam.transform;
+            camTransform.position = cameraRig.position;
+            camTransform.rotation = cameraRig.rotation;
+            camTransform.position += camTransform.forward * offset.z;
+            camTransform.position += camTransform.up * offset.y;
+            camTransform.position += camTransform.right * offset.x;
         }
 
         private void RotateRig()
         {
             if (mouseAim == null || cam == null || cameraRig == null)
                 return;
+
+            Transform camTransform = cam.transform;
 
             // Freeze the mouse aim direction when the free look key is pressed.
             if (Input.GetKeyDown(KeyCode.C))
@@ -151,8 +167,8 @@ namespace MFlight
 
             // Rotate the aim target that the plane is meant to fly towards.
             // Use the camera's axes in world space so that mouse motion is intuitive.
-            mouseAim.Rotate(cam.right, mouseY, Space.World);
-            mouseAim.Rotate(cam.up, mouseX, Space.World);
+            mouseAim.Rotate(camTransform.right, mouseY, Space.World);
+            mouseAim.Rotate(camTransform.up, mouseX, Space.World);
 
             // The up vector of the camera normally is aligned to the horizon. However, when
             // looking straight up/down this can feel a bit weird. At those extremes, the camera

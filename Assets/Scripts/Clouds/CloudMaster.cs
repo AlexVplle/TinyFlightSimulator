@@ -7,7 +7,7 @@ public class CloudMaster : MonoBehaviour {
     const string headerDecoration = " --- ";
     [Header (headerDecoration + "Main" + headerDecoration)]
     public Shader shader;
-    public Transform container;
+    private Transform container;
     public Vector3 cloudTestParams;
 
     [Header ("March settings" + headerDecoration)]
@@ -58,9 +58,10 @@ public class CloudMaster : MonoBehaviour {
     public Material material;
 
     void Awake () {
+        container = GameObject.Find("Container").transform;
         var weatherMapGen = FindObjectOfType<WeatherMap> ();
         if (Application.isPlaying) {
-            weatherMapGen.UpdateMap ();
+            //weatherMapGen.UpdateMap ();
         }
     }
 
