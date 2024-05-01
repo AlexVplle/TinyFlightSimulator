@@ -3,6 +3,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
+using Unity.Netcode;
 using UnityEngine;
 
 namespace MFlight.Demo
@@ -15,7 +16,7 @@ namespace MFlight.Demo
     /// for an example.
     /// </summary>
     [RequireComponent(typeof(Rigidbody))]
-    public class Plane : MonoBehaviour
+    public class Plane : NetworkBehaviour
     {
         [Header("Components")]
         [SerializeField] private MouseFlightController controller = null;
@@ -49,6 +50,15 @@ namespace MFlight.Demo
 
             if (controller == null)
                 Debug.LogError(name + ": Plane - Missing reference to MouseFlightController!");
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            if (!IsOwner)
+            {
+                enabled = false;
+                return;
+            }
         }
 
         private void Update()
