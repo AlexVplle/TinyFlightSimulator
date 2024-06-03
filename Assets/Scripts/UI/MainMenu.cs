@@ -1,12 +1,14 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Unity.Netcode;
+using SDD.Events;
 
 public class MainMenu : MonoBehaviour
 {
     public void PlaySolo()
     {
-        NetworkManager.Singleton.Shutdown();
+        EventManager.Instance.Raise(new SoloPlayerSpawnEvent { });
+        EventManager.Instance.Raise(new DesactivateMainMenuEvent { });
     }
 
     public void PlayMultiplayer()

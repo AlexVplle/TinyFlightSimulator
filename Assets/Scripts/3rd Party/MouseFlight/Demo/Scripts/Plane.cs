@@ -3,6 +3,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
+using System.ComponentModel.Design;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -40,6 +41,7 @@ namespace MFlight.Demo
         public float Roll { set { roll = Mathf.Clamp(value, -1f, 1f); } get { return roll; } }
 
         private Rigidbody rigid;
+        private NetworkObject networkObject;
 
         private bool rollOverride = false;
         private bool pitchOverride = false;
@@ -47,9 +49,18 @@ namespace MFlight.Demo
         private void Awake()
         {
             rigid = GetComponent<Rigidbody>();
+            networkObject = GetComponent<NetworkObject>();
 
             if (controller == null)
                 Debug.LogError(name + ": Plane - Missing reference to MouseFlightController!");
+        }
+
+        public void disableMultiplayer()
+        {
+            if (!networkObject)
+            {
+                networkObject.enabled = false;
+            }
         }
 
         public override void OnNetworkSpawn()
