@@ -5,6 +5,10 @@ using SDD.Events;
 
 public class MainMenu : MonoBehaviour
 {
+    [SerializeField] private GameObject soloButton;
+    [SerializeField] private GameObject multiplayerButton;
+    [SerializeField] private GameObject clientButton;
+    [SerializeField] private GameObject hostButton;
     public void PlaySolo()
     {
         EventManager.Instance.Raise(new SoloPlayerSpawnEvent { });
@@ -13,22 +17,21 @@ public class MainMenu : MonoBehaviour
 
     public void PlayMultiplayer()
     {
-        // Display multiplayer options (Host, Client, Server)
-        // You can show/hide additional buttons or UI elements here
+        soloButton.SetActive(false);
+        multiplayerButton.SetActive(false);
+        clientButton.SetActive(true);
+        hostButton.SetActive(true);
     }
 
     public void StartHost()
     {
+        EventManager.Instance.Raise(new DesactivateMainMenuEvent { });
         NetworkManager.Singleton.StartHost();
     }
 
     public void StartClient()
     {
+        EventManager.Instance.Raise(new DesactivateMainMenuEvent { });
         NetworkManager.Singleton.StartClient();
-    }
-
-    public void StartServer()
-    {
-        NetworkManager.Singleton.StartServer();
     }
 }
