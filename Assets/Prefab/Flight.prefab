@@ -698,7 +698,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1536346227
+  GlobalObjectIdHash: 951099334
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -776,11 +776,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 0}
-  thrust: 250
-  turnTorque: {x: 90, y: 25, z: 45}
-  forceMult: 20
+  thrust: 100
+  turnTorque: {x: 45, y: 15, z: 30}
+  forceMult: 60
   sensitivity: 5
-  aggressiveTurnAngle: 5
+  aggressiveTurnAngle: 10
   pitch: 0
   yaw: 0
   roll: 0
