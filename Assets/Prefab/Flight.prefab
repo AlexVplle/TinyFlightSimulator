@@ -235,7 +235,7 @@ Transform:
   m_GameObject: {fileID: 3752941556816454033}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 4.04, z: -13.54}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -273,7 +273,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 2000
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -675,7 +675,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 947290590408430760}
@@ -775,12 +775,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e59c5387dadf66844ae1eed2cbe1e654, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: {fileID: 0}
-  thrust: 100
+  thrust: 50
   turnTorque: {x: 45, y: 15, z: 30}
-  forceMult: 60
-  sensitivity: 5
-  aggressiveTurnAngle: 10
+  forceMult: 30
   pitch: 0
   yaw: 0
   roll: 0
@@ -796,16 +793,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9396f98894f2da47b58c709d5591ad8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aircraft: {fileID: 1393334138301427891}
-  mouseAim: {fileID: 3197743129108233069}
-  cameraRig: {fileID: 7976882189804335358}
   cam: {fileID: 7391654390492401643}
-  offset: {x: 0, y: 3.5, z: -9.5}
-  useFixed: 0
+  planeTransform: {fileID: 947290590408430760}
   camSmoothSpeed: 5
-  mouseSensitivity: 1
-  aimDistance: 300
-  showDebugInfo: 0
+  mouseSensitivity: 5
+  distanceFromPlane: 10
 --- !u!114 &3415817070981528096
 MonoBehaviour:
   m_ObjectHideFlags: 0

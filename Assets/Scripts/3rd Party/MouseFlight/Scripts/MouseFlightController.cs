@@ -1,249 +1,88 @@
-﻿//
-// Copyright (c) Brian Hernandez. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for details.
-//
-
-using System.Globalization;
+﻿using System.Globalization;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace MFlight
 {
-    /// <summary>
-    /// Combination of camera rig and controller for aircraft. Requires a properly set
-    /// up rig. I highly recommend either using or referencing the included prefab.
-    /// </summary>
     public class MouseFlightController : NetworkBehaviour
     {
         [Header("Components")]
-        [SerializeField] [Tooltip("Transform of the aircraft the rig follows and references")]
-        private Transform aircraft = null;
-        [SerializeField] [Tooltip("Transform of the object the mouse rotates to generate MouseAim position")]
-        private Transform mouseAim = null;
-        [SerializeField] [Tooltip("Transform of the object on the rig which the camera is attached to")]
-        private Transform cameraRig = null;
-        [SerializeField] [Tooltip("Transform of the camera itself")]
+        [SerializeField, Tooltip("Transform of the camera itself")]
         private Camera cam = null;
 
-        [Header("Options")]
-        public Vector3 offset;
-        [SerializeField] [Tooltip("Follow aircraft using fixed update loop")]
-        private bool useFixed = true;
+        [SerializeField, Tooltip("Transform of the plane")]
+        private Transform planeTransform = null;
 
-        [SerializeField] [Tooltip("How quickly the camera tracks the mouse aim point.")]
+        [SerializeField, Tooltip("How quickly the camera tracks the mouse aim point.")]
         private float camSmoothSpeed = 5f;
 
-        [SerializeField] [Tooltip("Mouse sensitivity for the mouse flight target")]
-        private float mouseSensitivity = 3f;
+        [SerializeField, Tooltip("Mouse sensitivity for the mouse flight target")]
+        private float mouseSensitivity = 20f;
 
-        [SerializeField] [Tooltip("How far the boresight and mouse flight are from the aircraft")]
-        private float aimDistance = 500f;
+        [SerializeField, Tooltip("Distance from the plane")]
+        private float distanceFromPlane = 10f;
 
-        [Space]
-        [SerializeField] [Tooltip("How far the boresight and mouse flight are from the aircraft")]
-        private bool showDebugInfo = false;
-
-        private Vector3 frozenDirection = Vector3.forward;
-        private bool isMouseAimFrozen = false;
-
-        /// <summary>
-        /// Get a point along the aircraft's boresight projected out to aimDistance meters.
-        /// Useful for drawing a crosshair to aim fixed forward guns with, or to indicate what
-        /// direction the aircraft is pointed.
-        /// </summary>
-        public Vector3 BoresightPos
-        {
-            get
-            {
-                return aircraft == null
-                     ? transform.forward * aimDistance
-                     : (aircraft.transform.forward * aimDistance) + aircraft.transform.position;
-            }
-        }
-
-        /// <summary>
-        /// Get the position that the mouse is indicating the aircraft should fly, projected
-        /// out to aimDistance meters. Also meant to be used to draw a mouse cursor.
-        /// </summary>
-        public Vector3 MouseAimPos
-        {
-            get
-            {
-                if (mouseAim != null)
-                {
-                    return isMouseAimFrozen
-                        ? GetFrozenMouseAimPos()
-                        : mouseAim.position + (mouseAim.forward * aimDistance);
-                }
-                else
-                {
-                    return transform.forward * aimDistance;
-                }
-            }
-        }
+        private float yaw = 0f;
+        private float pitch = 0f;
 
         private void Awake()
         {
-            if (aircraft == null)
-                Debug.LogError(name + "MouseFlightController - No aircraft transform assigned!");
-            if (mouseAim == null)
-                Debug.LogError(name + "MouseFlightController - No mouse aim transform assigned!");
-            if (cameraRig == null)
-                Debug.LogError(name + "MouseFlightController - No camera rig transform assigned!");
-            if (cam == null)
-                Debug.LogError(name + "MouseFlightController - No camera transform assigned!");
-
-            // To work correctly, the entire rig must not be parented to anything.
-            // When parented to something (such as an aircraft) it will inherit those
-            // rotations causing unintended rotations as it gets dragged around.
-            transform.parent = null;
-
-            if (!Application.isEditor) {
-                Cursor.lockState = CursorLockMode.Confined;
-                Cursor.visible = false;
-            }
+            // Validate that all required components are assigned
+            ValidateComponents();
         }
 
         public override void OnNetworkSpawn()
         {
-            Debug.Log("Ca marche");
+            // Disable the controller if it's not owned by the local player
             if (!IsOwner)
             {
-                enabled = false;
-                cam.enabled = false;
-                return;
+                DisableController();
             }
         }
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape)) {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
-            if (useFixed == false)
-                UpdateCameraPos();
-
-            RotateRig();
+            // Process input and update flight controls only if this is the local player's controller
+            HandleInput();
+            UpdateCameraPosition();
         }
 
-        private void FixedUpdate()
+        private void ValidateComponents()
         {
-            if (useFixed == true)
-                UpdateCameraPos();
+            // Check if the camera component is assigned
+            if (cam == null) Debug.LogError($"{name} MouseFlightController - No camera transform assigned!");
+            // Check if the plane transform is assigned
+            if (planeTransform == null) Debug.LogError($"{name} MouseFlightController - No plane transform assigned!");
         }
 
-        void LateUpdate() {
-            Transform camTransform = cam.transform;
-            camTransform.position = cameraRig.position;
-            camTransform.rotation = cameraRig.rotation;
-            camTransform.position += camTransform.forward * offset.z;
-            camTransform.position += camTransform.up * offset.y;
-            camTransform.position += camTransform.right * offset.x;
-        }
-
-        private void RotateRig()
+        private void DisableController()
         {
-            if (mouseAim == null || cam == null || cameraRig == null)
-                return;
+            // Disable the controller and camera if this is not the local player
+            enabled = false;
+            cam.enabled = false;
+        }
 
-            Transform camTransform = cam.transform;
-
-            // Freeze the mouse aim direction when the free look key is pressed.
-            if (Input.GetKeyDown(KeyCode.C))
-            {
-                isMouseAimFrozen = true;
-                frozenDirection = mouseAim.forward;
-            }
-            else if  (Input.GetKeyUp(KeyCode.C))
-            {
-                isMouseAimFrozen = false;
-                mouseAim.forward = frozenDirection;
-            }
-
-            // Mouse input.
+        private void HandleInput()
+        {
+            // Handle mouse input for rotating the camera
             float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
-            float mouseY = -Input.GetAxis("Mouse Y") * mouseSensitivity;
+            float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
 
-            // Rotate the aim target that the plane is meant to fly towards.
-            // Use the camera's axes in world space so that mouse motion is intuitive.
-            mouseAim.Rotate(camTransform.right, mouseY, Space.World);
-            mouseAim.Rotate(camTransform.up, mouseX, Space.World);
-
-            // The up vector of the camera normally is aligned to the horizon. However, when
-            // looking straight up/down this can feel a bit weird. At those extremes, the camera
-            // stops aligning to the horizon and instead aligns to itself.
-            Vector3 upVec = (Mathf.Abs(mouseAim.forward.y) > 0.9f) ? cameraRig.up : Vector3.up;
-
-            // Smoothly rotate the camera to face the mouse aim.
-            cameraRig.rotation = Damp(cameraRig.rotation,
-                                      Quaternion.LookRotation(mouseAim.forward, upVec),
-                                      camSmoothSpeed,
-                                      Time.deltaTime);
+            yaw += mouseX;
+            pitch -= mouseY;
+            pitch = Mathf.Clamp(pitch, -45f, 45f); // Clamp the pitch to avoid excessive vertical rotation
         }
 
-        private Vector3 GetFrozenMouseAimPos()
+        private void UpdateCameraPosition()
         {
-            if (mouseAim != null)
-                return mouseAim.position + (frozenDirection * aimDistance);
-            else
-                return transform.forward * aimDistance;
-        }
+            // Calculate the camera's position relative to the plane
+            Vector3 offset = new Vector3(0, 0, -distanceFromPlane);
+            Quaternion rotation = Quaternion.Euler(pitch, yaw, 0);
+            Vector3 targetPosition = planeTransform.position + rotation * offset;
 
-        private void UpdateCameraPos()
-        {
-            if (aircraft != null)
-            {
-                // Move the whole rig to follow the aircraft.
-                transform.position = aircraft.position;
-            }
-        }
-
-        // Thanks to Rory Driscoll
-        // http://www.rorydriscoll.com/2016/03/07/frame-rate-independent-damping-using-lerp/
-        /// <summary>
-        /// Creates dampened motion between a and b that is framerate independent.
-        /// </summary>
-        /// <param name="a">Initial parameter</param>
-        /// <param name="b">Target parameter</param>
-        /// <param name="lambda">Smoothing factor</param>
-        /// <param name="dt">Time since last damp call</param>
-        /// <returns></returns>
-        private Quaternion Damp(Quaternion a, Quaternion b, float lambda, float dt)
-        {
-            return Quaternion.Slerp(a, b, 1 - Mathf.Exp(-lambda * dt));
-        }
-
-        private void OnDrawGizmos()
-        {
-            if (showDebugInfo == true)
-            {
-                Color oldColor = Gizmos.color;
-
-                // Draw the boresight position.
-                if (aircraft != null)
-                {
-                    Gizmos.color = Color.white;
-                    Gizmos.DrawWireSphere(BoresightPos, 10f);
-                }
-
-                if (mouseAim != null)
-                {
-                    // Draw the position of the mouse aim position.
-                    Gizmos.color = Color.red;
-                    Gizmos.DrawWireSphere(MouseAimPos, 10f);
-
-                    // Draw axes for the mouse aim transform.
-                    Gizmos.color = Color.blue;
-                    Gizmos.DrawRay(mouseAim.position, mouseAim.forward * 50f);
-                    Gizmos.color = Color.green;
-                    Gizmos.DrawRay(mouseAim.position, mouseAim.up * 50f);
-                    Gizmos.color = Color.red;
-                    Gizmos.DrawRay(mouseAim.position, mouseAim.right * 50f);
-                }
-
-                Gizmos.color = oldColor;
-            }
+            // Smoothly update the camera's position and rotation
+            cam.transform.position = Vector3.Lerp(cam.transform.position, targetPosition, camSmoothSpeed * Time.deltaTime);
+            cam.transform.LookAt(planeTransform.position);
         }
     }
 }

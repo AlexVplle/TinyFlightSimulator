@@ -33,10 +33,10 @@ namespace MFlight.Demo
             if (mouseFlight == null || playerCam == null)
                 return;
 
-            UpdateGraphics(mouseFlight);
+            /*UpdateGraphics(mouseFlight);*/
         }
 
-        private void UpdateGraphics(MouseFlightController controller)
+        /*private void UpdateGraphics(MouseFlightController controller)
         {
             if (boresight != null)
             {
@@ -49,7 +49,7 @@ namespace MFlight.Demo
                 mousePos.position = playerCam.WorldToScreenPoint(controller.MouseAimPos);
                 mousePos.gameObject.SetActive(mousePos.position.z > 1f);
             }
-        }
+        }*/
 
         public void SetReferenceMouseFlight(MouseFlightController controller)
         {

@@ -8,6 +8,7 @@ public class PlayerManager : MonoBehaviour, IEventHandler
     public static PlayerManager Instance => m_Instance;
 
     [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private EndlessTerrain endlessTerrain;
 
     private GameObject playerReference;
 
@@ -50,13 +51,13 @@ public class PlayerManager : MonoBehaviour, IEventHandler
             Debug.Log("Player Prefab not set");
             return;
         }
-        GameObject playerReference = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+        GameObject playerReference = Instantiate(playerPrefab, new Vector3(0.0f, 100f, 0.0f), Quaternion.identity);
         MFlight.Demo.Plane planeScript = playerReference.GetComponent<MFlight.Demo.Plane>();
         if (!planeScript)
         {
             Debug.Log("Plane Script not set");
             return;
         }
-        planeScript.disableMultiplayer();
+        endlessTerrain.viewer = playerReference.transform;
     }
 }
