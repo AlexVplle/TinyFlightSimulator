@@ -1,5 +1,57 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1207822505905512338
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6382443040985164064}
+  - component: {fileID: 4319538804354418462}
+  m_Layer: 0
+  m_Name: LeftMissileEmitter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6382443040985164064
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1207822505905512338}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -3.58, y: 0.744, z: -1.01}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1393334138301427891}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4319538804354418462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1207822505905512338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8944c062fae9470e869834b517a4371, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waterMissilePrefab: {fileID: 23677172362420183, guid: 0b49263831b984604bda7c3d589b7ff4,
+    type: 3}
+  missileVelocityMultiplier: 4
+  particleSystems:
+  - {fileID: 5675146193364441369, guid: b7e42f2da416d4db8bfc35abc89dab2e, type: 3}
+  - {fileID: 8500916831127752675, guid: 2a2fb77c7e4ae4abb8a4f7e367b46c7f, type: 3}
+  - {fileID: 4996170514188537496, guid: 4962451547e5d41beabcb2b54afed21f, type: 3}
+  - {fileID: 509754149802892189, guid: 27829cfdfbbc845a6845a039e3e1049d, type: 3}
 --- !u!1 &1625386410123640971
 GameObject:
   m_ObjectHideFlags: 0
@@ -643,6 +695,58 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 0
+--- !u!1 &6473868539485810768
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3952835516661977848}
+  - component: {fileID: 6252743752197091530}
+  m_Layer: 0
+  m_Name: RightMissileEmitter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3952835516661977848
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6473868539485810768}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 3.52, y: 0.744, z: -1.01}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1393334138301427891}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6252743752197091530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6473868539485810768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8944c062fae9470e869834b517a4371, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waterMissilePrefab: {fileID: 23677172362420183, guid: 0b49263831b984604bda7c3d589b7ff4,
+    type: 3}
+  missileVelocityMultiplier: 4
+  particleSystems:
+  - {fileID: 5675146193364441369, guid: b7e42f2da416d4db8bfc35abc89dab2e, type: 3}
+  - {fileID: 8500916831127752675, guid: 2a2fb77c7e4ae4abb8a4f7e367b46c7f, type: 3}
+  - {fileID: 4996170514188537496, guid: 4962451547e5d41beabcb2b54afed21f, type: 3}
+  - {fileID: 509754149802892189, guid: 27829cfdfbbc845a6845a039e3e1049d, type: 3}
 --- !u!1 &7029124260542537911
 GameObject:
   m_ObjectHideFlags: 0
@@ -684,6 +788,8 @@ Transform:
   - {fileID: 3756813657937625685}
   - {fileID: 4129981252220011105}
   - {fileID: 9143894151854499432}
+  - {fileID: 3952835516661977848}
+  - {fileID: 6382443040985164064}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1886588287537118623
