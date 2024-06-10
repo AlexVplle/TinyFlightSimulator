@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.Design;
+using SDD.Events;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace MFlight.Demo
 {
@@ -68,7 +70,7 @@ namespace MFlight.Demo
 
         private void ApplyForces()
         {
-            rigid.AddRelativeForce(Vector3.forward * thrust * forceMult, ForceMode.Force);
+            rigid.AddRelativeForce(thrust * forceMult * Vector3.forward, ForceMode.Force);
             rigid.AddRelativeTorque(new Vector3(turnTorque.x * pitch, turnTorque.y * yaw, -turnTorque.z * roll) * forceMult, ForceMode.Force);
         }
     }
