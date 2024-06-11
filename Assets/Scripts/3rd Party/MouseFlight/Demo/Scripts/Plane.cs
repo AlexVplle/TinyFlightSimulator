@@ -2,7 +2,6 @@
 using SDD.Events;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace MFlight.Demo
 {
@@ -54,6 +53,8 @@ namespace MFlight.Demo
         private void Update()
         {
             HandleInput();
+            
+            EventManager.Instance.Raise(new FlightRotationUpdateEvent {yaw = yaw, rotation = transform.rotation});
         }
 
         private void HandleInput()

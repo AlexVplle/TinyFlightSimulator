@@ -1776,6 +1776,8 @@ MonoBehaviour:
   - {fileID: 509754149802892189, guid: 27829cfdfbbc845a6845a039e3e1049d, type: 3}
   _waterMissilePrefab: {fileID: 4393750809652495055, guid: 613b0eb5f3a144401acf1e82a0f48171,
     type: 3}
+  _smokePrefab: {fileID: 8690347920394502491, guid: bc976a4539e5846b4aa5af62beb63f22,
+    type: 3}
 --- !u!1 &1672078656
 GameObject:
   m_ObjectHideFlags: 0

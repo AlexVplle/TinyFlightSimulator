@@ -32,3 +32,9 @@ public class DestroyFireballEvent : SDD.Events.Event
 {
     public GameObject fireball;
 }
+
+public class FlightRotationUpdateEvent : SDD.Events.Event
+{
+    public Quaternion rotation;
+    public float yaw;
+}
