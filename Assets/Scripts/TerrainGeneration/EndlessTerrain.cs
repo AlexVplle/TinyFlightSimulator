@@ -243,23 +243,15 @@ public class EndlessTerrain : MonoBehaviour
         {
             if (!hasSetCollider)
             {
-                float sqrDstFromViewerToEdge = bounds.SqrDistance(viewerPosition);
-
-                if (sqrDstFromViewerToEdge < detailLevels[colliderLODIndex].sqrVisibleDstThreshold)
+                if (!lodMeshes[colliderLODIndex].hasRequestedMesh)
                 {
-                    if (!lodMeshes[colliderLODIndex].hasRequestedMesh)
-                    {
-                        lodMeshes[colliderLODIndex].RequestMesh(mapData);
-                    }
+                    lodMeshes[colliderLODIndex].RequestMesh(mapData);
                 }
 
-                if (sqrDstFromViewerToEdge < colliderGenerationDistanceThreshold * colliderGenerationDistanceThreshold)
+                if (lodMeshes[colliderLODIndex].hasMesh)
                 {
-                    if (lodMeshes[colliderLODIndex].hasMesh)
-                    {
-                        meshCollider.sharedMesh = lodMeshes[colliderLODIndex].mesh;
-                        hasSetCollider = true;
-                    }
+                    meshCollider.sharedMesh = lodMeshes[colliderLODIndex].mesh;
+                    hasSetCollider = true;
                 }
             }
         }

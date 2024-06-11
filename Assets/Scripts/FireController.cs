@@ -2,26 +2,30 @@ using UnityEngine;
 
 public class FireController : MonoBehaviour
 {
-    [SerializeField] private float velocity;
-    private bool _applyGravity = true;
+    public float gravityMultiplier = 0.5f;
     
-    private void Gravity()
+    private Rigidbody _rb;
+    private bool _applyCustomGravity = true;
+
+    void Start()
     {
-        transform.position += 20 * Time.deltaTime * -1 * transform.up;
+        _rb = GetComponent<Rigidbody>();
+        _rb.useGravity = false;
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        if (!_applyGravity)
+        if (_applyCustomGravity)
         {
-            return;
+            Vector3 customGravity = gravityMultiplier * Physics.gravity * _rb.mass;
+            _rb.AddForce(customGravity, ForceMode.Acceleration);
         }
-        Gravity();
     }
 
-    private void OnTriggerEnter(Collider other)
+    void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("boulette de merde qui rentre dans le sol");
-        _applyGravity = false;
+        _applyCustomGravity = false;
+        _rb.velocity = Vector3.zero;
+        _rb.isKinematic = true;
     }
 }

@@ -287,7 +287,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1.75
+      scalar: 8.75
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -5127,8 +5127,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.2
-      minScalar: 0.1
+      scalar: 1
+      minScalar: 0.5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -9967,7 +9967,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 4.5
+      scalar: 22.5
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -19651,7 +19651,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 2.5
+      scalar: 12.5
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -24214,9 +24214,10 @@ GameObject:
   m_Component:
   - component: {fileID: 8366065665557296239}
   - component: {fileID: 3403312480962438703}
-  - component: {fileID: 4925180567532090610}
+  - component: {fileID: -2347251314021893902}
+  - component: {fileID: 8527544744044506020}
   m_Layer: 0
-  m_Name: Fire
+  m_Name: FireBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24232,7 +24233,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 346426507329059752}
@@ -24250,9 +24251,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0d54c2b6a478455986b3d3890a8069f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocity: 10
---- !u!65 &4925180567532090610
-BoxCollider:
+  gravityMultiplier: 2
+--- !u!54 &-2347251314021893902
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2030452918708613922}
+  serializedVersion: 4
+  m_Mass: 10
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 112
+  m_CollisionDetection: 2
+--- !u!135 &8527544744044506020
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -24266,9 +24294,9 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 3.3114228, z: 1}
-  m_Center: {x: 0, y: 1.1557112, z: 0}
+  m_Radius: 2.049242
+  m_Center: {x: 0, y: 1, z: 0}
