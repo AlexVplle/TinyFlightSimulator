@@ -15,7 +15,8 @@ public class EndlessTerrain : MonoBehaviour
 
     public Transform viewer;
     public Material mapMaterial;
-
+    public GameObject firePrefab;
+    
     public static Vector2 viewerPosition;
     Vector2 viewerPositionOld;
     static MapGenerator mapGenerator;
@@ -83,7 +84,16 @@ public class EndlessTerrain : MonoBehaviour
                     }
                     else
                     {
-                        terrainChunkDictionary.Add(viewedChunkCoord, new TerrainChunk(viewedChunkCoord, chunkSize, detailLevels, colliderLODIndex, transform, mapMaterial));
+                        terrainChunkDictionary.Add(viewedChunkCoord, new TerrainChunk(
+                            viewedChunkCoord,
+                            chunkSize,
+                            detailLevels,
+                            colliderLODIndex,
+                            transform,
+                            mapMaterial,
+                            firePrefab
+                            )
+                        );
                     }
                 }
 
@@ -112,12 +122,24 @@ public class EndlessTerrain : MonoBehaviour
         bool mapDataReceived;
         int previousLODIndex = -1;
         bool hasSetCollider;
+        
+        public GameObject prefab;
+        public GameObject prefabParent;
 
-        public TerrainChunk(Vector2 coord, int size, LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Material material)
+        public TerrainChunk(
+            Vector2 coord,
+            int size,
+            LODInfo[] detailLevels,
+            int colliderLODIndex,
+            Transform parent,
+            Material material,
+            GameObject firePrefab
+            )
         {
             this.coord = coord;
             this.detailLevels = detailLevels;
             this.colliderLODIndex = colliderLODIndex;
+            prefab = firePrefab;
 
             position = coord * size;
             bounds = new Bounds(position, Vector2.one * size);
@@ -133,6 +155,9 @@ public class EndlessTerrain : MonoBehaviour
             meshObject.transform.parent = parent;
             meshObject.transform.localScale = Vector3.one * mapGenerator.terrainData.uniformScale;
             SetVisible(false);
+            
+            prefabParent = new GameObject("Prefab Parent");
+            prefabParent.transform.parent = meshObject.transform;
 
             lodMeshes = new LODMesh[detailLevels.Length];
             for (int i = 0; i < detailLevels.Length; i++)
@@ -154,9 +179,8 @@ public class EndlessTerrain : MonoBehaviour
             mapDataReceived = true;
 
             UpdateTerrainChunk();
+            SpawnPrefabs();
         }
-
-
 
         public void UpdateTerrainChunk()
         {
@@ -219,23 +243,15 @@ public class EndlessTerrain : MonoBehaviour
         {
             if (!hasSetCollider)
             {
-                float sqrDstFromViewerToEdge = bounds.SqrDistance(viewerPosition);
-
-                if (sqrDstFromViewerToEdge < detailLevels[colliderLODIndex].sqrVisibleDstThreshold)
+                if (!lodMeshes[colliderLODIndex].hasRequestedMesh)
                 {
-                    if (!lodMeshes[colliderLODIndex].hasRequestedMesh)
-                    {
-                        lodMeshes[colliderLODIndex].RequestMesh(mapData);
-                    }
+                    lodMeshes[colliderLODIndex].RequestMesh(mapData);
                 }
 
-                if (sqrDstFromViewerToEdge < colliderGenerationDistanceThreshold * colliderGenerationDistanceThreshold)
+                if (lodMeshes[colliderLODIndex].hasMesh)
                 {
-                    if (lodMeshes[colliderLODIndex].hasMesh)
-                    {
-                        meshCollider.sharedMesh = lodMeshes[colliderLODIndex].mesh;
-                        hasSetCollider = true;
-                    }
+                    meshCollider.sharedMesh = lodMeshes[colliderLODIndex].mesh;
+                    hasSetCollider = true;
                 }
             }
         }
@@ -249,12 +265,22 @@ public class EndlessTerrain : MonoBehaviour
         {
             return meshObject.activeSelf;
         }
-
+        
+        void SpawnPrefabs()
+        {
+            int numberOfPrefabsToSpawn = Random.Range(3, 15);
+            for (int i = 0; i < numberOfPrefabsToSpawn; i++)
+            {
+                Vector2 point = new Vector2(Random.Range(0, mapGenerator.mapChunkSize), Random.Range(0, mapGenerator.mapChunkSize));
+                float randomHeight = Random.Range(mapGenerator.terrainData.minHeight , mapGenerator.terrainData.maxHeight) + 20;
+                Vector3 spawnPosition = new Vector3(position.x + point.x, randomHeight, position.y + point.y);
+                GameObject spawnedPrefab = Instantiate(prefab, spawnPosition, Quaternion.identity, prefabParent.transform);
+            }
+        }
     }
 
     class LODMesh
     {
-
         public Mesh mesh;
         public bool hasRequestedMesh;
         public bool hasMesh;
@@ -279,7 +305,6 @@ public class EndlessTerrain : MonoBehaviour
             hasRequestedMesh = true;
             mapGenerator.RequestMeshData(mapData, lod, OnMeshDataReceived);
         }
-
     }
 
     [System.Serializable]
