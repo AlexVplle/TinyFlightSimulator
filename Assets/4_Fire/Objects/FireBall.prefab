@@ -24218,7 +24218,7 @@ GameObject:
   - component: {fileID: 8527544744044506020}
   m_Layer: 0
   m_Name: FireBall
-  m_TagString: Untagged
+  m_TagString: Fireball
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -24298,5 +24298,5 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 2.049242
+  m_Radius: 3.5
   m_Center: {x: 0, y: 1, z: 0}

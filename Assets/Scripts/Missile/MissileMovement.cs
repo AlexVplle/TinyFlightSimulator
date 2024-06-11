@@ -1,3 +1,4 @@
+using System;
 using SDD.Events;
 using UnityEngine;
 
@@ -19,6 +20,23 @@ namespace  Missile
         private void FixedUpdate()
         {
             transform.position += transform.forward * velocity;
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Plane"))
+            {
+                return;
+            }
+            
+            // bump into the ground
+            EventManager.Instance.Raise(new DestroyMissileEvent {Missile = gameObject});
+
+            if (other.CompareTag("Fireball"))
+            {
+                EventManager.Instance.Raise(new CreateSmokeEvent {Position = transform.position});
+                EventManager.Instance.Raise(new DestroyFireballEvent {fireball = other.gameObject});
+            }
         }
 
         private void CheckDestruction()

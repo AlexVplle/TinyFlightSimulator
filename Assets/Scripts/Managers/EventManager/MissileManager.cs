@@ -8,6 +8,7 @@ public class MissileManager: MonoBehaviour, IEventHandler
     public static MissileManager Instance => m_Instance;
     [SerializeField] private ParticleSystem[] _particleSystemPrefabs;
     [SerializeField] private GameObject _waterMissilePrefab;
+    [SerializeField] private GameObject _smokePrefab;
 
     private void OnEnable()
     {
@@ -23,12 +24,16 @@ public class MissileManager: MonoBehaviour, IEventHandler
     {
         EventManager.Instance.AddListener<CreateNewMissileEvent>(OnCreateMissile);
         EventManager.Instance.AddListener<DestroyMissileEvent>(OnDestoryMissile);
+        EventManager.Instance.AddListener<CreateSmokeEvent>(OnCreateSmoke);
+        EventManager.Instance.AddListener<DestroyFireballEvent>(OnDestroyFireball);
     }
 
     public void UnsubscribeEvents()
     {
-        EventManager.Instance.AddListener<CreateNewMissileEvent>(OnCreateMissile);
-        EventManager.Instance.AddListener<DestroyMissileEvent>(OnDestoryMissile);
+        EventManager.Instance.RemoveListener<CreateNewMissileEvent>(OnCreateMissile);
+        EventManager.Instance.RemoveListener<DestroyMissileEvent>(OnDestoryMissile);
+        EventManager.Instance.RemoveListener<CreateSmokeEvent>(OnCreateSmoke);
+        EventManager.Instance.RemoveListener<DestroyFireballEvent>(OnDestroyFireball);
     }
     
     private void Awake()
@@ -51,6 +56,16 @@ public class MissileManager: MonoBehaviour, IEventHandler
         }
 
         Instantiate(_waterMissilePrefab, e.Transform.position, e.Transform.rotation);
+    }
+
+    public void OnCreateSmoke(CreateSmokeEvent e)
+    {
+        Instantiate(_smokePrefab, e.Position, _smokePrefab.transform.rotation);
+    }
+
+    public void OnDestroyFireball(DestroyFireballEvent e)
+    {
+       Destroy(e.fireball); 
     }
 
     public void OnDestoryMissile(DestroyMissileEvent e)
