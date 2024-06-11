@@ -50,8 +50,7 @@ public class MissileManager: MonoBehaviour, IEventHandler
             Instantiate(ps, e.Transform);
         }
 
-        GameObject missile = Instantiate(_waterMissilePrefab, e.Transform.position, e.Transform.rotation);
-        missile.GetComponent<Rigidbody>().velocity = e.Velocity;
+        Instantiate(_waterMissilePrefab, e.Transform.position, e.Transform.rotation);
     }
 
     public void OnDestoryMissile(DestroyMissileEvent e)

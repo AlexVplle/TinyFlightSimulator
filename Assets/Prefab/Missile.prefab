@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5440273448787321402}
   - component: {fileID: 2429813926211682368}
   - component: {fileID: 5815017791522409217}
-  - component: {fileID: 1182496520398462302}
+  - component: {fileID: 8637721564781424713}
   m_Layer: 0
   m_Name: Missile
   m_TagString: Untagged
@@ -106,7 +106,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1182496520398462302
+--- !u!114 &8637721564781424713
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -115,8 +115,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4393750809652495055}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d81c3b478691740a0968d19a52ae9c2a, type: 3}
+  m_Script: {fileID: 11500000, guid: 70e9d519f56df4a2e9d26e396e70d83c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocity: 100
-  flight: {fileID: 7029124260542537911, guid: 1afd4242f85728c44accdc615d352066, type: 3}
+  velocity: 5
