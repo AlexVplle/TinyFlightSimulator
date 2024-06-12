@@ -96,6 +96,8 @@ GameObject:
   - component: {fileID: 5408932302489351116}
   - component: {fileID: 5898369562551931719}
   - component: {fileID: 693565844174575006}
+  - component: {fileID: 4878450412146317280}
+  - component: {fileID: 606969711869969261}
   m_Layer: 5
   m_Name: PlayerHUD
   m_TagString: Untagged
@@ -187,6 +189,41 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!222 &4878450412146317280
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1790887407930489154}
+  m_CullTransparentMesh: 1
+--- !u!114 &606969711869969261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1790887407930489154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 8400000, guid: f3bc4c2fcddf3fe48b10529957247528, type: 2}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!1 &2260737465728464199
 GameObject:
   m_ObjectHideFlags: 0
@@ -375,6 +412,8 @@ GameObject:
   - component: {fileID: 3379086432250361620}
   - component: {fileID: 7391654390492401643}
   - component: {fileID: 4680000431027379794}
+  - component: {fileID: 7192562062415047390}
+  - component: {fileID: 3651984275697108999}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -438,7 +477,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
+  m_TargetTexture: {fileID: 8400000, guid: f3bc4c2fcddf3fe48b10529957247528, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -488,6 +527,34 @@ MonoBehaviour:
   colA: {r: 0.8915094, g: 0.94486547, b: 1, a: 1}
   colB: {r: 0.44313726, g: 0.6431373, b: 0.8, a: 1}
   material: {fileID: 0}
+--- !u!114 &7192562062415047390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3752941556816454033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5951e4a2dbb05f94ebbb12c892a79bbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fogShader: {fileID: 7200000, guid: a003cf1307a37a94cacbd0e341a5a549, type: 3}
+  planeTransform: {fileID: 1393334138301427891}
+  fogTexture: {fileID: 8400000, guid: f3bc4c2fcddf3fe48b10529957247528, type: 2}
+--- !u!114 &3651984275697108999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3752941556816454033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eb7fd45f950909459169e8b987ecd09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  postProcessMaterial: {fileID: 0}
 --- !u!1 &3824001564729155528
 GameObject:
   m_ObjectHideFlags: 0
@@ -1301,7 +1368,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerHUD: {fileID: 5408932302489351116}
   scoreRef: {fileID: 846536110325453596}
-  compass: {fileID: 0}
 --- !u!1 &7029124260542537911
 GameObject:
   m_ObjectHideFlags: 0
@@ -1333,7 +1399,7 @@ Transform:
   m_GameObject: {fileID: 7029124260542537911}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 300, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1460,6 +1526,7 @@ MonoBehaviour:
   planeTransform: {fileID: 947290590408430760}
   camSmoothSpeed: 5
   mouseSensitivity: 5
+  joystickSensitivity: 20
   distanceFromPlane: 10
 --- !u!114 &3415817070981528096
 MonoBehaviour:

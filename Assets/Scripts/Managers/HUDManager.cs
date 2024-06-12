@@ -8,6 +8,7 @@ public class HUDManager : MonoBehaviour, IEventHandler
     public static HUDManager Instance => m_Instance;
 
     [SerializeField] private Canvas MainMenu;
+    [SerializeField] private Canvas GameOver;
 
     private void OnEnable()
     {
@@ -22,11 +23,13 @@ public class HUDManager : MonoBehaviour, IEventHandler
     public void SubscribeEvents()
     {
         EventManager.Instance.AddListener<DesactivateMainMenuEvent>(DesactivateMainMenu);
+        EventManager.Instance.AddListener<KillPlayer>(ActivateGameOver);
     }
 
     public void UnsubscribeEvents()
     {
-        EventManager.Instance.AddListener<DesactivateMainMenuEvent>(DesactivateMainMenu);
+        EventManager.Instance.RemoveListener<DesactivateMainMenuEvent>(DesactivateMainMenu);
+        EventManager.Instance.RemoveListener<KillPlayer>(ActivateGameOver);
     }
 
     private void Awake()
@@ -44,5 +47,10 @@ public class HUDManager : MonoBehaviour, IEventHandler
     private void DesactivateMainMenu(DesactivateMainMenuEvent e)
     {
         MainMenu.gameObject.SetActive(false);
+    }
+
+    private void ActivateGameOver(KillPlayer e)
+    {
+        GameOver.gameObject.SetActive(true);
     }
 }

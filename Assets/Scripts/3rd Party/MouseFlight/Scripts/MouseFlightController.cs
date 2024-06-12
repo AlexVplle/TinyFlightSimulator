@@ -19,6 +19,9 @@ namespace MFlight
         [SerializeField, Tooltip("Mouse sensitivity for the mouse flight target")]
         private float mouseSensitivity = 20f;
 
+        [SerializeField, Tooltip("Joystick sensitivity for the joystick flight target")]
+        private float joystickSensitivity = 20f;
+
         [SerializeField, Tooltip("Distance from the plane")]
         private float distanceFromPlane = 10f;
 
@@ -68,8 +71,11 @@ namespace MFlight
             float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
             float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
 
-            yaw += mouseX;
-            pitch -= mouseY;
+            float joystickX = Input.GetAxis("RightStickHorizontal");
+            float joystickY = Input.GetAxis("RightStickVertical");
+
+            yaw += mouseX + joystickX;
+            pitch -= mouseY - joystickY;
             pitch = Mathf.Clamp(pitch, -45f, 45f); // Clamp the pitch to avoid excessive vertical rotation
         }
 

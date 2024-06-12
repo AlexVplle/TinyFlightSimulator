@@ -38,3 +38,8 @@ public class FlightRotationUpdateEvent : SDD.Events.Event
     public Quaternion rotation;
     public float yaw;
 }
+
+public class KillPlayer : SDD.Events.Event
+{
+
+}

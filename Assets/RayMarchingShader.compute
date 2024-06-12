@@ -1,0 +1,37 @@
+#pragma kernel CSMain
+
+RWTexture2D<float4> Result;
+uint width;
+uint height;
+
+float3 _PlanePosition;
+float3 _CameraForward;
+float3 _CameraRight;
+float3 _CameraUp;
+float _FogDensity;
+
+float fogDensity(float3 position)
+{
+    float distance = length(position - _PlanePosition);
+    return exp(-_FogDensity * distance * distance);
+}
+
+[numthreads(8, 8, 1)]
+void CSMain(uint3 dtid : SV_DispatchThreadID)
+{
+    float2 uv = (float2(dtid.xy) - float2(width * 0.5, height * 0.5)) / height;
+
+    float3 rayDirection = normalize(_CameraForward + uv.x * _CameraRight + uv.y * _CameraUp);
+    float3 rayOrigin = _PlanePosition + rayDirection * 10.0; // Offset ray origin forward
+
+    float density = fogDensity(rayOrigin);
+    float4 fogColor = float4(density, density, density, 1.0);
+    
+    Result[dtid.xy] = float4(1.0, 0, 0, 1.0); // Output solid red for debugging
+    
+
+    if (dtid.x < width && dtid.y < height)
+    {
+        Result[dtid.xy] = fogColor;
+    }
+}

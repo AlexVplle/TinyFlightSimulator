@@ -12,7 +12,7 @@ namespace Missile
 
         public void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Fire1"))
             {
                 EventManager.Instance.Raise(new CreateNewMissileEvent {Transform = transform});
             }

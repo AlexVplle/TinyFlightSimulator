@@ -69,6 +69,12 @@ namespace MFlight.Demo
             ApplyForces();
         }
 
+        private void OnCollisionEnter(Collision collision)
+        {
+            Destroy(gameObject);
+            EventManager.Instance.Raise(new KillPlayer());
+        }
+
         private void ApplyForces()
         {
             rigid.AddRelativeForce(thrust * forceMult * Vector3.forward, ForceMode.Force);
