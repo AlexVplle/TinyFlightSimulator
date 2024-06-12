@@ -12,7 +12,6 @@ public class PlayerHUDManager: MonoBehaviour, IEventHandler
     
     [SerializeField] private Canvas playerHUD;
     [SerializeField] private TextMeshProUGUI scoreRef;
-    [SerializeField] private Image compass;
     
     private int _score;
     
@@ -22,13 +21,6 @@ public class PlayerHUDManager: MonoBehaviour, IEventHandler
         return euler.y;
     }
     
-    void OnFlightRotationUpdate(FlightRotationUpdateEvent e)
-    {
-        Quaternion rotation = e.rotation;
-        float rot = GetYawFromQuaternion(rotation);
-        compass.rectTransform.localEulerAngles = new Vector3(0, 0, rot);
-    }
-
     private void OnEnable()
     {
         SubscribeEvents();
@@ -42,13 +34,11 @@ public class PlayerHUDManager: MonoBehaviour, IEventHandler
     public void SubscribeEvents()
     {
         EventManager.Instance.AddListener<CreateSmokeEvent>(OnCreateSmoke);
-        EventManager.Instance.AddListener<FlightRotationUpdateEvent>(OnFlightRotationUpdate);
     }
 
     public void UnsubscribeEvents()
     {
         EventManager.Instance.RemoveListener<CreateSmokeEvent>(OnCreateSmoke);
-        EventManager.Instance.RemoveListener<FlightRotationUpdateEvent>(OnFlightRotationUpdate);
     }
     
     private void Awake()
