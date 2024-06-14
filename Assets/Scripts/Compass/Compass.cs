@@ -6,6 +6,7 @@ public class Compass : MonoBehaviour
 {
 	[SerializeField] private RawImage CompassImage;
 	[SerializeField] private TextMeshProUGUI CompassDirectionText;
+	[SerializeField] private TextMeshProUGUI AltitudeText;
     
 	private Transform Player;
 	
@@ -46,5 +47,7 @@ public class Compass : MonoBehaviour
 			270 => "W",
 			_ => headingAngle.ToString(CultureInfo.InvariantCulture)
 		};
+
+		AltitudeText.text = "Altitude : " + (int)Player.transform.position.y;
 	}
 }
